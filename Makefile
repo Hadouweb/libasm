@@ -8,7 +8,20 @@ HEADER = -I$(INC_PATH)
 
 NAME = libfts.a
 
-SRC = $(SRC_PATH)/ft_bzero.s\
+SRC = 	$(SRC_PATH)/ft_bzero.s\
+		$(SRC_PATH)/ft_strcat.s\
+		$(SRC_PATH)/ft_isalpha.s\
+		$(SRC_PATH)/ft_isdigit.s\
+		$(SRC_PATH)/ft_isalnum.s\
+		$(SRC_PATH)/ft_isascii.s\
+		$(SRC_PATH)/ft_isprint.s\
+		$(SRC_PATH)/ft_toupper.s\
+		$(SRC_PATH)/ft_tolower.s\
+		$(SRC_PATH)/ft_strlen.s\
+		$(SRC_PATH)/ft_memset.s\
+		$(SRC_PATH)/ft_memcpy.s\
+		$(SRC_PATH)/ft_strdup.s\
+		$(SRC_PATH)/ft_cat.s\
 
 OBJ = $(SRC:.s=.o)
 

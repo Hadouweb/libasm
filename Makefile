@@ -1,33 +1,37 @@
-CC = gcc
-FLAG = -Werror -Wextra -Wall -g
+CC = nasm
+FLAG = -Wall -Werror -Wextra
 
-SRCS_PATH = ./srcs
+SRC_PATH = ./srcs
 INC_PATH = ./includes
 
-HEADER = -I $(INC_PATH)
-
-SRC = $(SRCS_PATH)/main.c\
-
-OBJ = $(SRC:.c=.o)
+HEADER = -I$(INC_PATH)
 
 NAME = libfts.a
 
-all: $(NAME)
+SRC = $(SRC_PATH)/ft_bzero.s\
+
+OBJ = $(SRC:.s=.o)
+
+all: $(NAME) test
 
 $(NAME): $(OBJ)
-	@$(CC) $(FLAG) -o $(NAME) $^
-	@echo "\n\033[39mCompilation done.\033[0m"
+	@ar -rc $(NAME) $(OBJ)
+	@ranlib $(NAME)
 
-%.o: %.c
-	@$(CC) $(FLAG) -o $@ -c $< $(HEADER)
-	@echo "\033[34m█\033[0m\c"
+%.o: %.s
+	@$(CC) $(FLAG) -f macho64 $^ -o $@ $(HEADER)
+	@echo "\033[32m█\033[0m\c"
 
 clean:
 	@rm -rf $(OBJ)
 
 fclean: clean
 	@rm -rf $(NAME)
+	@rm -f test
 
 re: fclean all
+
+test:
+	@gcc $(FLAG) main_test.c $(HEADER) -lfts -L. -o test
 
 .PHONY: all clean fclean re

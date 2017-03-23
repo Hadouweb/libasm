@@ -1,24 +1,16 @@
-; Prototype : int ft_isdigit(int c)
-;
-
 section .text
 	global _ft_isdigit
 
 _ft_isdigit:
-	push rbp
-	mov rbp, rsp
+	push	rbp
+	mov		rbp, rsp		; Sauvegarde de la pile
+	mov		rax, 0			; int ret = 0
+	cmp		rdi, '0'		; compare c et '0'
+	jl		end				; Si c est inferieur a '0' -> c'est pas un digit
+	cmp		rdi, '9'		; compare c et '9'
+	jg		end				; Si c est superieur a '9' -> c'est pas un digit
+	mov		rax, 1
 
-	mov rax, 0		; Initialisation du resultat
-
-	cmp rdi, '0'
-	jl pas_digit
-	cmp rdi, '9'
-	jg pas_digit
-
-	mov rax, 1		; C'est un digit, rectification du resultat
-
-pas_digit:
-
+end:
 	leave
-	ret
-
+	ret 

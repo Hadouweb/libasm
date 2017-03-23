@@ -1,33 +1,29 @@
-; Prototype : char *ft_strcat(char *dest, const char *src)
-;
-; Notes :
-; - La valeur de retour d'une fonction doit etre placee dans le registre rax.
-
 section .text
-    global _ft_strcat
+	global _ft_strcat
+
 _ft_strcat:
-    push rbp                ; {
-    mov rbp, rsp            ;
+	push	rbp
+	mov		rbp, rsp
+	mov		rax, rdi		; rax = le premier param (char *dst)
+	mov		rcx, rdi		; rcx = char *dst (pour ne pas toucher au debut du ptr de dst)
+	mov		rdx, rsi		; rdx = le second param (char *src)
 
-    mov rax, rdi            ; char *r = dest;
-    mov rdx, rdi            ; char *d = dest;
-    mov r10, rsi            ; char *s = src
-recherche_fin_dest:
-    mov rcx, [rdx]          ; c = *d;
-    cmp cl, 0              ; z = c == 0
-    je remplissage          ; if (z) goto remplissage;
-    inc rdx                 ; d++;
-    jmp recherche_fin_dest  ; goto recherche_fin_dest;
-remplissage:
-    mov cl, [r10]           ; c = *s;
-    cmp cl, 0               ; z = c == 0;
-    je fin_de_chaine        ; if (z) goto fin;
-    mov [rdx], cl           ; *d = c;
-    inc rdx                 ; d++;
-    inc r10                 ; s++;
-    jmp remplissage         ; goto remplissage;
-fin_de_chaine:
-    mov [rdx], byte 0       ; *d = '\0';
+loop_end_dst:
+	cmp		[rcx], byte 0	; compare *dst et 0
+	je		loop_fill		; sortir et aller vers le label de remplissage de dst
+	inc		rcx				; dst++
+	jmp		loop_end_dst	; retour vers le debut de la boucle
 
-    leave
-    ret                     ; return r; }
+loop_fill:
+	mov		r8b, [rdx]		; registre de 8 octects = *src
+	cmp		r8b, byte 0		; compare *src et 0
+	je		end
+	mov		[rcx], r8b		; *dst = *src
+	inc		rcx				; dst++
+	inc		rdx				; src++
+	jmp		loop_fill		; retour vers le debut de la boucle
+
+end:
+	mov		[rcx], byte 0 	; *dst = '\0'.
+	leave
+	ret						; le registre rax est utilise comme valeur de retour

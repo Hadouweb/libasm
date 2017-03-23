@@ -1,23 +1,16 @@
-; Prototype : int ft_isprint(int c)
-;
-
 section .text
 	global _ft_isprint
 
 _ft_isprint:
-	push rbp
-	mov rbp, rsp
+	push	rbp
+	mov		rbp, rsp	; Sauvegarde de la pile
+	mov		rax, 0		; int ret = 0
+	cmp		rdi, 32		; Si < 32
+	jl		end			; return 0
+	cmp		rdi, 127	; Si >= 127
+	jge		end			; return 0
+	mov		rax, 1		; return 1
 
-	mov rax, 0
-
-	cmp rdi, 0x20
-	jl pas_print
-	cmp rdi, 0x7e
-	jg pas_print
-
-	mov rax, 1
-
-pas_print:
-
+end:
 	leave
 	ret

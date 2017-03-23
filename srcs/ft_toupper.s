@@ -1,23 +1,16 @@
-; Prototype : int ft_toupper(int c)
-;
-
 section .text
 	global _ft_toupper
 
 _ft_toupper:
-	push rbp
-	mov rbp, rsp
+	push    rbp
+	mov		rbp, rsp        ; Sauvegarde de la pile
+	mov		rax, rdi        ; valeur de retour == param c (rdi)
+	cmp		rax, 'a'        ; Si < 'a'
+	jl		end             ; return c
+	cmp		rax, 'z'        ; Si > 'z'
+	jg		end             ; return c
+	sub		rax, 32         ; c = c - 32
 
-	mov rax, rdi	; Copie c dans le resultat
-
-	cmp rax, 'a'
-	jl fin			; Si c'est inferieur a 'a' -> fin
-	cmp rax, 'z'
-	jg fin			; Si c'est superieur a 'z' -> fin
-
-	sub rax, 0x20	; Pour tout le reste, soustraction de 0x20 au resultat
-
-fin:
-
+end:
 	leave
 	ret

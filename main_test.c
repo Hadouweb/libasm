@@ -19,7 +19,7 @@
 # define ENABLE_ft_tolower 1
 # define ENABLE_ft_strlen 1
 # define ENABLE_ft_memset 1
-# define ENABLE_ft_memcpyo 1
+# define ENABLE_ft_memcpy 1
 # define ENABLE_ft_strdup 1
 # define ENABLE_ft_cat 1
 
@@ -228,6 +228,81 @@ int 	test_ft_strlen(void)
 	return 1;
 }
 
+int 	test_ft_memset(void)
+{
+	char	b1[100], b2[100];
+
+	ft_memset(b1, 42, 100);
+	memset(b2, 42, 100);
+	if (memset(b1, 99, 0) != ft_memset(b1, 99, 0))
+		return 0;
+	if ((memcmp(b1, b2, 100) != 0))
+		return 0;
+	b1[0] = 1;
+	ft_memset(b1, 0, 0);
+	if (b1[0] != 1)
+		return 0;
+	return 1;
+}
+
+int 	test_ft_memcpy(void)
+{
+	char	b1[100], b2[100];
+
+	memset(b1, 33, 100);
+	memset(b2, 63, 100);
+	ft_memcpy(b1, b2, 100);
+	if (memcmp(b1, b2, 100) != 0)
+		return 0;
+	if (ft_memcpy(b1, b2, 0) != b1)
+		return 0;
+	return 1;
+}
+
+int 	test_ft_strdup(void)
+{
+	char	*c;
+
+	c = "AbC";
+	if (c == ft_strdup(c))
+		return 0;
+	if (strcmp(ft_strdup("aaaaa"), "aaaaa") != 0)
+		return 0;
+	if (strcmp(ft_strdup(""), "") != 0)
+		return 0;
+	return 1;
+}
+
+int 	test_ft_cat(void)
+{
+	int 	pids[2];
+	char 	buf[20];
+	int 	cpy_stdout;
+	int 	fd;
+
+	cpy_stdout = dup(1);
+	pipe(pids);
+	dup2(pids[1], 1);
+
+	system("echo '_ _ Hello World \t OK' > catout");
+	fd = open("catout", O_RDONLY);
+	if (fd == -1)
+		return 0;
+	ft_cat(fd);
+	read(pids[0], buf, 20);
+	dup2(cpy_stdout, 1);
+
+	close(fd);
+	close(pids[0]);
+	close(pids[1]);
+	close(cpy_stdout);
+	system("rm catout");
+	if (memcmp(buf, "_ _ Hello World \t OK", 20) != 0)
+		return 0;
+	ft_cat(-1);
+	return 1;
+}
+
 int		main(void)
 {
 	printf("\n");
@@ -240,5 +315,9 @@ int		main(void)
 	TEST(ft_toupper)
 	TEST(ft_tolower)
 	TEST(ft_strlen)
+	TEST(ft_memset)
+	TEST(ft_memcpy)
+	TEST(ft_strdup)
+	TEST(ft_cat)
 	return (0);
 }

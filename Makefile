@@ -17,6 +17,7 @@ SRC = 	$(SRC_PATH)/ft_bzero.s\
 		$(SRC_PATH)/ft_isprint.s\
 		$(SRC_PATH)/ft_toupper.s\
 		$(SRC_PATH)/ft_tolower.s\
+		$(SRC_PATH)/ft_puts.s\
 		$(SRC_PATH)/ft_strlen.s\
 		$(SRC_PATH)/ft_memset.s\
 		$(SRC_PATH)/ft_memcpy.s\

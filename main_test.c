@@ -17,6 +17,7 @@
 # define ENABLE_ft_isprint 1
 # define ENABLE_ft_toupper 1
 # define ENABLE_ft_tolower 1
+# define ENABLE_ft_puts 1
 # define ENABLE_ft_strlen 1
 # define ENABLE_ft_memset 1
 # define ENABLE_ft_memcpy 1
@@ -212,6 +213,35 @@ int 	test_ft_tolower(void)
 	return 1;
 }
 
+int 	test_ft_puts(void)
+{
+	int		ret;
+	int		puts_ret1;
+	//int		puts_ret2;
+	int		out;
+	int		p[2];
+	char	buf[10000];
+
+	out = dup(1);
+	pipe(p);
+	dup2(p[1], 1);
+	puts_ret1 = ft_puts("aaa");
+	//puts_ret2 = ft_puts(NULL);
+	dup2(out, 1);
+	ret = read(p[0], buf, 10000);
+	buf[ret] = 0;
+	close(p[0]);
+	close(p[1]);
+	close(out);
+	if (puts_ret1 <= 0)
+		return 0;
+	//if (puts_ret2 <= 0)
+	//	return 0;
+	if (strcmp(buf, "aaa\n(null)\n") != 0)
+		return 0;
+	return 1;
+}
+
 int 	test_ft_strlen(void)
 {
 	int test_len = 10 * 1000 * 1000;
@@ -314,6 +344,7 @@ int		main(void)
 	TEST(ft_isprint)
 	TEST(ft_toupper)
 	TEST(ft_tolower)
+	TEST(ft_puts)
 	TEST(ft_strlen)
 	TEST(ft_memset)
 	TEST(ft_memcpy)

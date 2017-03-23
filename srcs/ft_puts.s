@@ -1,7 +1,3 @@
-; Prototype : int ft_puts(const char *s)
-; Note : https://en.wikibooks.org/wiki/X86_Assembly/Interfacing_with_Linux#syscall
-;
-
 %define MACH_SYSCALL(nb)	0x2000000 | nb
 %define WRITE				4
 

@@ -1,55 +1,43 @@
-; Prototype : void ft_cat(int fd);
-;
-
 %define MACH_SYSCALL(nb)	0x2000000 | nb
 %define READ				3
 %define WRITE				4
 %define BUFF_SIZE			1024
 
 section .bss
-	buffer: resb BUFF_SIZE
+	buff: resb BUFF_SIZE
 
 section .text
 	global _ft_cat
 
 _ft_cat:
-	push rbp
-	mov rbp, rsp
+	push	rbp
+	mov		rbp, rsp					; Sauvegarde de la pile
 
-	; Sauvegarde de rbx, utilise pour memoriser le file descriptor
-	push rbx
-	mov rbx, rdi
+	push	rbx
+	mov		rbx, rdi
 
-boucle:
-	; Lecture...
-	mov rdi, rbx
-	lea rsi, [rel buffer]
-	mov rdx, BUFF_SIZE
-	mov rax, MACH_SYSCALL(READ)
+loop:
+	mov		rdi, rbx
+	lea		rsi, [rel buff]				; Load Effective Address
+	mov		rdx, BUFF_SIZE				; Nombre de byte au'on souhaite lire
+	mov		rax, MACH_SYSCALL(READ)		; On place l'indice du syscall read dans rax
 	syscall
+	jc		end							; Jump if carry (error)
 
-	; En cas d'erreur, le bit carry est set
-	jc fin
 
-	; Detection de la fin de lecture
-	cmp rax, 0
-	jle fin
-
-	; Ecriture
-	mov rdi, 1
-	lea rsi, [rel buffer]
-	mov rdx, rax
-	mov rax, MACH_SYSCALL(WRITE)
+	mov		rdi, 1						; Param 1 = stdout
+	lea		rsi, [rel buff]				; Param 2 = buff
+	mov		rdx, rax					; Param 3 = size
+	mov		rax, MACH_SYSCALL(WRITE)	; On place l'indice du syscall write dans rax
 	syscall
-	
-	; En cas d'erreur, le bit carry est set
-	jc fin
-	
-	jmp boucle ; Recommence jusqu'a la fin de la lecture
+	jc		end							; Jump if carry (error)
 
-fin:
-	; Restauration de rbx
-	pop rbx
+	cmp		rax, 0						; Si le retour de read vaut 0
+	jle		end							; On sort de la boucle
+	
+	jmp loop							; On continue la boule read et write
 
+end:
+	pop		rbx
 	leave
 	ret

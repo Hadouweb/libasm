@@ -1,20 +1,12 @@
-; Prototype : void *ft_memcpy(void *dest, const void *src, size_t n);
-;
-
 section .text
 	global _ft_memcpy
+
 _ft_memcpy:
-	push rbp
-	mov rbp, rsp
-
-						; rdi = dest
-						; rsi = src
-
-	mov rax, rdi		; Pour retourner la destination
-	
-	mov rcx, rdx		; rcx = n; // Initialisation du compteur
-	rep movsb			; Copie rcx octets de rsi vers rdi
-
-
+	push	rbp
+	mov		rbp, rsp	; Sauvegarde de la pile
+	push	rdi			; Sauvegarde ptr dst
+	mov		rcx, rdx	; i = len
+	repnz	movsb		; while (*rdi != 0 && rcx != 0) { *rdi = *rsi; rdi++; rsi++ }
+	pop		rax			; rax = rdi and return ptr dst 
 	leave
 	ret

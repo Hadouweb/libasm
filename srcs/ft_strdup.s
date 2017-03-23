@@ -1,37 +1,30 @@
-; Prototype : void *ft_strdup(const char *s);
-; Notes :
-; - Les registres rdi et rdx font partit des registres qui peuvent etre modifie par un call
-;
-
 section .text
 	global _ft_strdup
 	extern _malloc
 
 _ft_strdup:
-	push rbp
-	mov rbp, rsp
+	push	rbp
+	mov		rbp, rsp	; Sauvegarde de la pile
 
-	mov rdx, rdi				; memorise le debut de la chaine dans rdx
-	mov rcx, 0xffffffffffffffff	; Le plus grand uint64
-	mov al, 0					; al = '\0';
-	repne scasb					; while (*rdi != al && rcx != 0) {rdi++; rcx--;} rdi++;
-	sub rdi, rdx				; length + 1 = fin + 1 - debut
+	mov		r10, rdi	; void *ptr = ptr on param
+	mov		rcx, ~0x0	; max size uint64
+	mov		al, 0		; char c = '\0'
+	repne	scasb		; while (*rdi != al && rcx != 0) { rdi++; rcx--; }
+	sub		rdi, r10	; size(rdi) = rdi - rdx
 
-	push rdi					; Sauvegarde de rdi susceptible d'etre modifie par malloc
-	push rdx					; Sauvegarde de rdx susceptible d'etre modifie par malloc
+	push	rdi			; Sauvegarde de rcx (size)
+	push	r10			; Sauvegarde de r10 (ptr)
 
-	call _malloc				; rax = malloc (rdi); // rdi = length + 1
+	call	_malloc		; rax = malloc(rdi) size + 1 car on a compte le '\0'
+						
+	; Attention a l'ordre des pop, c'est une pile...					
+	pop		r10			; Recuperation de rdi
+	pop		rdi			; Recuperation de r10
 
-	pop rdx						; Recuperation de rdx sauvegarde avant malloc
-	pop rdi						; Recuperation de rdi sauvegarde avant malloc
-
-	mov rcx, rdi				; Initialisation du compteur rcx, avec rdi
-	mov rsi, rdx				; rsi = s; // Source
-	mov rdi, rax				; rdi = "adresse du malloc"; // Destination
+	mov		rcx, rdi	; i = size
+	mov		rsi, r10	; Preparation pour movsb ptr src
+	mov		rdi, rax	; Preparation pour movsb ptr dst
+	rep		movsb		; while (rcx != 0) { *rdi = *rsi; rdi++; rsi++ }
 	
-	rep movsb					; Copie rcx octets de rsi vers rdi
-
-								; rax contient l'adresse du malloc
-
 	leave
 	ret

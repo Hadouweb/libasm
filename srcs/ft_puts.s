@@ -2,48 +2,43 @@
 %define WRITE				4
 
 section .data
-	eol: db 10		; '\n'
+	eol: db 10							; '\n'
+	null_text: db "(null)", 10			; "(null)"
+			.len: equ $ - null_text
 
 section .text
 	global _ft_puts
+	extern _ft_strlen
 
 _ft_puts:
-	push rbp
-	mov rbp, rsp
-
-	mov rsi, rdi	; s
-	mov r10, rdi	; met s dans r10. r10 va servir a mesurer la longueur de la chaine
-	mov rdi, 1		; sortie standard
-	mov rdx, 0		; length
-
-recherche_longueur:
-	mov rcx, [r10]
-	cmp cl, 0
-	je longueur_connue	; la longueur est dans rdx
-	inc rdx
-	inc r10
-	jmp recherche_longueur
-
-longueur_connue:
-
-	mov rax, MACH_SYSCALL(WRITE)
+	push	rbp
+	mov		rbp, rsp					; sauvegarde de la pile
+	cmp		rdi, 0						; if null
+    je		end							; END
+    mov		r8, rdi						; r8 = rdi
+    cmp		byte [r8], 0				; if *ptr == 0
+	je		ptr_is_null					; END
+	push	rdi							; sauvegarde du param
+	call	_ft_strlen					; rax = len
+	mov		rdi, 1						; param 1 = stdout
+	pop		rsi							; param 2 = ptr
+	mov		rdx, rax					; param 3 = size
+	mov		rax, MACH_SYSCALL(WRITE)	; write(rdi, rsi, rdx);
 	syscall
-	jc erreur						; Gestion de l'erreur d'ecriture
-
-	lea rsi, [rel eol]				; Adresse du '\n'
-	mov rdx, 1
-	mov rax, MACH_SYSCALL(WRITE)	; Ecriture du '\n'
+	mov		rdi, 1						; param 1 = stdout
+	lea		rsi, [rel eol]				; param 2 = ptr de '\n'
+	mov		rdx, 1						; param 3 = size
+	mov		rax, MACH_SYSCALL(WRITE)	; write(rdi, rsi, rdx)
 	syscall
 
-	; le retour de write est transmis a la fonction appelante de facon transparante par rax
-	; Sauf si le carry est set
-	jnc fin
+ptr_is_null:
+	mov		rdi, 1						; param 1 = stdout
+	lea		rsi, [rel null_text]		; param 2 = ptr de '\n'
+	mov		rdx, null_text.len			; param 3 = size
+	mov		rax, MACH_SYSCALL(WRITE)	; write(rdi, rsi, rdx)
+	syscall
+	jmp		end
 
-erreur:
-	mov rax, -1						; EOF
-	
-
-fin:
-	
+end:
 	leave
 	ret

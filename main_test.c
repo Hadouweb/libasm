@@ -217,7 +217,7 @@ int 	test_ft_puts(void)
 {
 	int		ret;
 	int		puts_ret1;
-	//int		puts_ret2;
+	int		puts_ret2;
 	int		out;
 	int		p[2];
 	char	buf[10000];
@@ -226,7 +226,7 @@ int 	test_ft_puts(void)
 	pipe(p);
 	dup2(p[1], 1);
 	puts_ret1 = ft_puts("aaa");
-	//puts_ret2 = ft_puts(NULL);
+	puts_ret2 = ft_puts(NULL);
 	dup2(out, 1);
 	ret = read(p[0], buf, 10000);
 	buf[ret] = 0;
@@ -235,8 +235,8 @@ int 	test_ft_puts(void)
 	close(out);
 	if (puts_ret1 <= 0)
 		return 0;
-	//if (puts_ret2 <= 0)
-	//	return 0;
+	if (puts_ret2 <= 0)
+		return 0;
 	if (strcmp(buf, "aaa\n(null)\n") != 0)
 		return 0;
 	return 1;

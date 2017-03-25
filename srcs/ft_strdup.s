@@ -16,7 +16,9 @@ _ft_strdup:
 	push	r10			; Sauvegarde de r10 (ptr)
 
 	call	_malloc		; rax = malloc(rdi) size + 1 car on a compte le '\0'
-						
+	test	rax, rax	; si le malloc fail
+	jz		end	
+					
 	; Attention a l'ordre des pop, c'est une pile...					
 	pop		r10			; Recuperation de rdi
 	pop		rdi			; Recuperation de r10
@@ -26,5 +28,6 @@ _ft_strdup:
 	mov		rdi, rax	; Preparation pour movsb ptr dst
 	rep		movsb		; while (rcx != 0) { *rdi = *rsi; rdi++; rsi++ }
 	
+end:
 	leave
 	ret

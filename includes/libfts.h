@@ -38,10 +38,12 @@ void				ft_cat(int fd);
 /*
 **	BONUS
 */
-
 void				ft_list_push_back(t_list *list, t_link *link);
 void				ft_list_push_front(t_list *list, t_link *link);
 void				ft_list_push_after_node(t_list *list, t_link *node,
 						t_link *new_node);
+void				ft_list_push_before_node(t_list *list, t_link *node,
+						t_link *new_node);
+char				*ft_itoa_base(int value, int base);
 
 #endif

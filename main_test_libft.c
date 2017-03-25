@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <time.h>
-#include "libfts.h"
+#include "libft.h"
 
 # define ENABLE_ft_bzero 1
 # define ENABLE_ft_strcat 1
@@ -218,7 +218,7 @@ int 	test_ft_tolower(void)
 	return 1;
 }
 
-int 	test_ft_puts(void)
+/*int 	test_ft_puts(void)
 {
 	int		ret;
 	int		puts_ret1;
@@ -245,7 +245,7 @@ int 	test_ft_puts(void)
 	if (strcmp(buf, "aaa\n(null)\n") != 0)
 		return 0;
 	return 1;
-}
+}*/
 
 int 	test_ft_strlen(void)
 {
@@ -308,7 +308,7 @@ int 	test_ft_strdup(void)
 	return 1;
 }
 
-int 	test_ft_cat(void)
+/*int 	test_ft_cat(void)
 {
 	int 	pids[2];
 	char 	buf[20];
@@ -336,7 +336,7 @@ int 	test_ft_cat(void)
 		return 0;
 	ft_cat(-1);
 	return 1;
-}
+}*/
 
 /*
 **	BONUS *********************************************************
@@ -365,7 +365,7 @@ t_node	*make_node(int nb, char *str)
 	return n;
 }
 
-void	ft_list_print(t_list *list)
+void	ft_list_print2(t_list *list)
 {
 	t_link	*l;
 	t_node	*n;
@@ -439,7 +439,7 @@ int 	test_ft_list_push_back(void)
 	ft_list_push_back(&list, &n3->link);
 	int ret = ft_list_checker(&list);
 	if (ret == 0)
-		ft_list_print(&list);
+		ft_list_print2(&list);
 	ft_list_push_back(&list, NULL);
 	ft_list_push_back(NULL, &n3->link);
 
@@ -457,7 +457,7 @@ int 	test_ft_list_push_front(void)
 	ft_list_push_front(&list, &n1->link);
 	ft_list_push_front(&list, &n2->link);
 	ft_list_push_front(&list, &n3->link);
-	//ft_list_print(&list);
+	//ft_list_print2(&list);
 	int ret = ft_list_checker(&list);
 
 	ft_list_push_front(&list, NULL);
@@ -520,7 +520,7 @@ int 	test_ft_list_push_after_node(void)
 	ft_list_push_back(&list, &n1->link);
 	ft_list_push_after_node(&list, &n1->link, &n2->link);
 	ft_list_push_after_node(&list, &n1->link, &n3->link);
-	//ft_list_print(&list);
+	//ft_list_print2(&list);
 	int ret = ft_list_checker2(&list);
 	return ret;
 }
@@ -536,7 +536,7 @@ int 	test_ft_list_push_before_node(void)
 	ft_list_push_back(&list, &n2->link);
 	ft_list_push_before_node(&list, &n2->link, &n1->link);
 	ft_list_push_before_node(&list, &n2->link, &n3->link);
-	//ft_list_print(&list);
+	//ft_list_print2(&list);
 	int ret = ft_list_checker2(&list);
 	return ret;
 }
@@ -546,15 +546,9 @@ int		test_ft_itoa_base(void)
 	char *str1 = ft_itoa_base(42, 2);
 	char *str2 = ft_itoa_base(0, 2);
 	char *str3 = ft_itoa_base(42, 16);
-	char *str4 = ft_itoa_base(0, 10);
+	char *str4 = ft_itoa_base(0, 16);
 	char *str5 = ft_itoa_base(-10, 16);
 	char *str6 = ft_itoa_base(-10, 10);
-	printf("%p %s\n", str1, str1);
-	printf("%p %s\n", str2, str2);
-	printf("%p %s\n", str3, str3);
-	printf("%p %s\n", str4, str4);
-	printf("%p %s\n", str5, str5);
-	printf("%p %s\n", str6, str6);
 	if (strcmp(str1, "101010") != 0)
 		return 0;
 	if (strcmp(str2, "0") != 0)
@@ -581,12 +575,12 @@ int		main(void)
 	TEST(ft_isprint)
 	TEST(ft_toupper)
 	TEST(ft_tolower)
-	TEST(ft_puts)
+	//TEST(ft_puts)
 	TEST(ft_strlen)
 	TEST(ft_memset)
 	TEST(ft_memcpy)
 	TEST(ft_strdup)
-	TEST(ft_cat)
+	//TEST(ft_cat)
 	TEST(ft_list_push_back)
 	TEST(ft_list_push_front)
 	TEST(ft_list_push_after_node)

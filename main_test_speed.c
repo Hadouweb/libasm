@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include "libfts.h"
-#include "libft.h"
+//#include "libft.h"
 
 # define ENABLE_ft_bzero 1
 # define ENABLE_ft_strcat 1
@@ -72,11 +72,11 @@ int		main(void)
 	int 	i;
 	char	b1[100], b2[100], b3[100];
 
-	timer.start = clock();
+	/*timer.start = clock();
 	i = nb_loob;
 	while (i--)
 		ft_memset(b1, 42, 100);
-	timer.diff1 = clock() - timer.start;
+	timer.diff1 = clock() - timer.start;*/
 
 	timer.start = clock();
 	i = nb_loob;
@@ -87,13 +87,13 @@ int		main(void)
 	timer.start = clock();
 	i = nb_loob;
 	while (i--)
-		asm_memset(b3, 42, 100);
+		ft_memset(b3, 42, 100);
 	timer.diff3 = clock() - timer.start;
 
-	int msec1 = timer.diff1 * 1000 / CLOCKS_PER_SEC;
+	//int msec1 = timer.diff1 * 1000 / CLOCKS_PER_SEC;
 	int msec2 = timer.diff2 * 1000 / CLOCKS_PER_SEC;
 	int msec3 = timer.diff3 * 1000 / CLOCKS_PER_SEC;
-	printf("FT  : %d,%d\n", msec1/1000, msec1%1000);
+	//printf("FT  : %d,%d\n", msec1/1000, msec1%1000);
 	printf("STD : %d,%d\n", msec2/1000, msec2%1000);
 	printf("ASM : %d,%d\n", msec3/1000, msec3%1000);
 

@@ -23,6 +23,9 @@ SRC = 	$(SRC_PATH)/ft_bzero.s\
 		$(SRC_PATH)/ft_memcpy.s\
 		$(SRC_PATH)/ft_strdup.s\
 		$(SRC_PATH)/ft_cat.s\
+		$(SRC_PATH)/ft_list_push_back.s\
+		$(SRC_PATH)/ft_list_push_front.s\
+		$(SRC_PATH)/ft_list_push_after_node.s\
 
 OBJ = $(SRC:.s=.o)
 

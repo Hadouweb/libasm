@@ -23,6 +23,9 @@
 # define ENABLE_ft_memcpy 1
 # define ENABLE_ft_strdup 1
 # define ENABLE_ft_cat 1
+# define ENABLE_ft_list_push_back 1
+# define ENABLE_ft_list_push_front 1
+# define ENABLE_ft_list_push_after_node 1
 
 # define TEST(F) {\
 	if (ENABLE_##F) {\
@@ -333,6 +336,194 @@ int 	test_ft_cat(void)
 	return 1;
 }
 
+/*
+**	BONUS *********************************************************
+*/
+
+typedef struct 		s_node
+{
+	t_link			link;
+	int 			nb;
+	char 			*str;
+}					t_node;
+
+t_node	*make_node(int nb, char *str)
+{
+	char 	*s;
+	t_node	*n;
+
+	s = strdup(str);
+	n = (t_node*)malloc(sizeof(t_node));
+	if (n)
+	{
+		n->nb = nb;
+		n->str = s;
+	}
+	bzero(&n->link, sizeof(t_link));
+	return n;
+}
+
+void	ft_list_print(t_list *list)
+{
+	t_link	*l;
+	t_node	*n;
+
+	printf("Size list: %lu\n", list->size);
+	if (list->head == NULL)
+		return ;
+	l = list->head;
+	while (l)
+	{
+		n = PTR_NODE(l, t_node, link);
+		printf("nb: %d\n", n->nb);
+		printf("str: %s\n", n->str);
+		l = l->next;
+	}
+}
+
+int	ft_list_checker(t_list *list)
+{
+	t_link	*l;
+	t_link	*l2;
+	t_node	*n1;
+	t_node	*n2;
+	t_node	*n3;
+	t_node	*n1bis;
+	t_node	*n2bis;
+	t_node	*n3bis;
+
+	if (list->head == NULL)
+		return 0;
+	if (list->size != 3)
+		return 0;
+	l = list->head;
+	n1 = PTR_NODE(l, t_node, link);
+	if (n1->nb != 42 || strcmp(n1->str, "Hello") != 0)
+		return 0;
+	l = l->next;
+	n2 = PTR_NODE(l, t_node, link);
+	if (n2->nb != 1000 || strcmp(n2->str, "Bla Bla Bla..") != 0)
+		return 0;
+	l = l->next;
+	n3 = PTR_NODE(l, t_node, link);
+	if (n3->nb != 0 || strcmp(n3->str, "ZERO") != 0)
+		return 0;
+
+	l2 = list->tail;
+	n1bis = PTR_NODE(l2, t_node, link);
+	if (n1bis->nb != 0 || strcmp(n1bis->str, "ZERO") != 0)
+		return 0;
+	l2 = l2->prev;
+	n2bis = PTR_NODE(l2, t_node, link);
+	if (n2bis->nb != 1000 || strcmp(n2bis->str, "Bla Bla Bla..") != 0)
+		return 0;
+	l2 = l2->prev;
+	n3bis = PTR_NODE(l2, t_node, link);
+	if (n3bis->nb != 42 || strcmp(n3bis->str, "Hello") != 0)
+		return 0;
+	return 1;
+}
+
+int 	test_ft_list_push_back(void)
+{
+	t_list		list;
+	t_node		*n1 = make_node(42, "Hello");
+	t_node		*n2 = make_node(1000, "Bla Bla Bla..");
+	t_node		*n3 = make_node(0, "ZERO");
+
+	bzero(&list, sizeof(t_list));
+	ft_list_push_back(&list, &n1->link);
+	ft_list_push_back(&list, &n2->link);
+	ft_list_push_back(&list, &n3->link);
+	int ret = ft_list_checker(&list);
+	if (ret == 0)
+		ft_list_print(&list);
+	ft_list_push_back(&list, NULL);
+	ft_list_push_back(NULL, &n3->link);
+
+	return ret;
+}
+
+int 	test_ft_list_push_front(void)
+{
+	t_list		list;
+	t_node		*n3 = make_node(42, "Hello");
+	t_node		*n2 = make_node(1000, "Bla Bla Bla..");
+	t_node		*n1 = make_node(0, "ZERO");
+
+	bzero(&list, sizeof(t_list));
+	ft_list_push_front(&list, &n1->link);
+	ft_list_push_front(&list, &n2->link);
+	ft_list_push_front(&list, &n3->link);
+	//ft_list_print(&list);
+	int ret = ft_list_checker(&list);
+
+	ft_list_push_front(&list, NULL);
+	ft_list_push_front(NULL, &n3->link);
+
+	return ret;
+}
+
+int	ft_list_checker2(t_list *list)
+{
+	t_link	*l;
+	t_link	*l2;
+	t_node	*n1;
+	t_node	*n2;
+	t_node	*n3;
+	t_node	*n1bis;
+	t_node	*n2bis;
+	t_node	*n3bis;
+
+	if (list->head == NULL)
+		return 0;
+	if (list->size != 3)
+		return 0;
+	l = list->head;
+	n1 = PTR_NODE(l, t_node, link);
+	if (n1->nb != 1 || strcmp(n1->str, "one") != 0)
+		return 0;
+	l = l->next;
+	n2 = PTR_NODE(l, t_node, link);
+	if (n2->nb != 3 || strcmp(n2->str, "three") != 0)
+		return 0;
+	l = l->next;
+	n3 = PTR_NODE(l, t_node, link);
+	if (n3->nb != 2 || strcmp(n3->str, "two") != 0)
+		return 0;
+
+	l2 = list->tail;
+	n1bis = PTR_NODE(l2, t_node, link);
+	if (n1bis->nb != 2 || strcmp(n1bis->str, "two") != 0)
+		return 0;
+	l2 = l2->prev;
+	n2bis = PTR_NODE(l2, t_node, link);
+	if (n2bis->nb != 3 || strcmp(n2bis->str, "three") != 0)
+		return 0;
+	l2 = l2->prev;
+	n3bis = PTR_NODE(l2, t_node, link);
+	if (n3bis->nb != 1 || strcmp(n3bis->str, "one") != 0)
+		return 0;
+	return 1;
+}
+
+int 	test_ft_list_push_after_node(void)
+{
+	t_list		list;
+	t_node		*n1 = make_node(1, "one");
+	t_node		*n2 = make_node(2, "two");
+	t_node		*n3 = make_node(3, "three");
+
+	bzero(&list, sizeof(t_list));
+	ft_list_push_back(&list, &n1->link);
+	ft_list_push_back(&list, &n2->link);
+	ft_list_push_after_node(&list, &n2->link, &n3->link);
+	return 0;
+	ft_list_print(&list);
+	int ret = ft_list_checker2(&list);
+	return ret;
+}
+
 int		main(void)
 {
 	printf("\n");
@@ -350,5 +541,8 @@ int		main(void)
 	TEST(ft_memcpy)
 	TEST(ft_strdup)
 	TEST(ft_cat)
+	TEST(ft_list_push_back)
+	TEST(ft_list_push_front)
+	TEST(ft_list_push_after_node)
 	return (0);
 }

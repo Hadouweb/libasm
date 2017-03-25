@@ -27,7 +27,8 @@
 # define ENABLE_ft_list_push_front 1
 # define ENABLE_ft_list_push_after_node 1
 # define ENABLE_ft_list_push_before_node 1
-# define ENABLE_ft_itoa_base 1
+# define ENABLE_ft_memcmp 1
+# define ENABLE_ft_memchr 1
 
 # define TEST(F) {\
 	if (ENABLE_##F) {\
@@ -74,6 +75,33 @@ int		test_ft_strcat(void)
 	if (strcmp(buf, "Hello World!") != 0)
 		return 0;
 	if (buf != ft_strcat(buf, ""))
+		return 0;
+	return 1;
+}
+
+int		test_ft_isalpha(void)
+{
+	int 	i = 'A';
+	while (i <= 'Z')
+	{
+		if (ft_isalpha(i) == 0)
+			return 0;
+		i++;
+	}
+	i = 'a';
+	while (i <= 'z')
+	{
+		if (ft_isalpha(i) == 0)
+			return 0;
+		i++;
+	}
+	if (ft_isalpha(0) != 0)
+		return 0;
+	if (ft_isalpha(47) != 0)
+		return 0;
+	if (ft_isalpha(-1) != 0)
+		return 0;
+	if (ft_isalpha(123) != 0)
 		return 0;
 	return 1;
 }
@@ -541,31 +569,32 @@ int 	test_ft_list_push_before_node(void)
 	return ret;
 }
 
-int		test_ft_itoa_base(void)
+int 	test_ft_memcmp(void)
 {
-	char *str1 = ft_itoa_base(42, 2);
-	char *str2 = ft_itoa_base(0, 2);
-	char *str3 = ft_itoa_base(42, 16);
-	char *str4 = ft_itoa_base(0, 10);
-	char *str5 = ft_itoa_base(-10, 16);
-	char *str6 = ft_itoa_base(-10, 10);
-	printf("%p %s\n", str1, str1);
-	printf("%p %s\n", str2, str2);
-	printf("%p %s\n", str3, str3);
-	printf("%p %s\n", str4, str4);
-	printf("%p %s\n", str5, str5);
-	printf("%p %s\n", str6, str6);
-	if (strcmp(str1, "101010") != 0)
+	if (ft_memcmp("ab\0ab", "ab\0ab", 6) != 0)
 		return 0;
-	if (strcmp(str2, "0") != 0)
+	if (ft_memcmp("aaa", "aab", 4) >= 0)
 		return 0;
-	if (strcmp(str3, "2A") != 0)
+	if (ft_memcmp("aab", "aac", 2) != 0)
 		return 0;
-	if (strcmp(str4, "0") != 0)
+	if (ft_memcmp("aww", "bpp", 0) != 0)
 		return 0;
-	if (strcmp(str5, "A") != 0)
+	if (ft_memcmp("\200", "\0", 1) <= 0)
 		return 0;
-	if (strcmp(str6, "-10") != 0)
+	return 1;
+}
+
+int 	test_ft_memchr(void)
+{
+	if ((ft_memchr("abcdef", 'a', 5) != memchr("abcdef", 'a', 5)))
+		return 0;
+	if ((ft_memchr("abcdef", 'c', 5) != memchr("abcdef", 'c', 5)))
+		return 0;
+	if ((ft_memchr("abcdef", '\0', 7) != memchr("abcdef", '\0', 7)))
+		return 0;
+	if ((ft_memchr("abcdef", 'z', 6) != memchr("abcdef", 'z', 6)))
+		return 0;
+	if ((ft_memchr("abcdef", 999, 6) != memchr("abcdef", 999, 6)))
 		return 0;
 	return 1;
 }
@@ -575,6 +604,7 @@ int		main(void)
 	printf("\n");
 	TEST(ft_bzero)
 	TEST(ft_strcat)
+	TEST(ft_isalpha)
 	TEST(ft_isdigit)
 	TEST(ft_isalnum)
 	TEST(ft_isascii)
@@ -591,6 +621,7 @@ int		main(void)
 	TEST(ft_list_push_front)
 	TEST(ft_list_push_after_node)
 	TEST(ft_list_push_before_node)
-	TEST(ft_itoa_base)
+	TEST(ft_memcmp)
+	TEST(ft_memchr)
 	return (0);
 }

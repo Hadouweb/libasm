@@ -44,6 +44,7 @@ void				ft_list_push_after_node(t_list *list, t_link *node,
 						t_link *new_node);
 void				ft_list_push_before_node(t_list *list, t_link *node,
 						t_link *new_node);
-char				*ft_itoa_base(int value, int base);
+int					ft_memcmp(const void *s1, const void *s2, size_t n);
+void				*ft_memchr(const void *s, int c, size_t n);
 
 #endif
